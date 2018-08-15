@@ -1,0 +1,74 @@
+<!doctype html>
+
+{% load static %}
+
+<html lang="en">
+    <head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>Nickhunter</title>
+
+	<!-- Fonts -->
+	<link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
+	<link href="https://fonts.googleapis.com/css?family=M+PLUS+1p:300" rel="stylesheet">
+
+
+	<!-- Styles -->
+	<link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'nickgenerator/general.css' %}">
+
+    </head>
+    <body>
+	<div class="flex-center position-ref full-height">
+	    <div class="content">
+		{% if date %}
+		<div class="title up-text">
+			Generated&nbsp;{{date}}&nbsp;|&nbsp;{{rating}}&nbsp;liked
+		</div>
+		{% endif %}
+		<div class="controls">
+			<a href="{% url 'nickgenerator:like' generated_nick %}">&lt;like&gt;</a>
+			&nbsp;&nbsp;
+			<a href="{% url 'nickgenerator:index' %}">&lt;new&gt;</a>
+		</div>
+		<div class="new-nick up-text">
+			<span>{{generated_nick}}</span>
+		</div>
+		<div class='checking-results'>
+		<div class="checking-result {%if vk_free %}result-free{% else %}result-busy{% endif %}">
+			<a href="http://vk.com/{{generated_nick}}">vk</a>&nbsp;is
+			{% if vk_free %}free{% else %}busy{% endif %}
+		</div>	
+		<div class="checking-result {%if github_free%}result-free{% else %}result-busy{% endif %}"  style='margin-left:80px;'>
+			<a href="http://github.com/{{generated_nick}}">github</a>&nbsp;is
+			{% if github_free %}free{% else %}busy{% endif %}
+		</div>
+		</div>
+		<div class='list-containers'>
+		<div class = "list-container">
+			<h3>Latest nicks</h3>
+			{% if latest_nicks %}
+				{% for nick in latest_nicks %}
+					<a href = "{% url 'nickgenerator:nick' nick.title %}">{{nick.title}}</a>&nbsp;&nbsp;{{nick.date}}<br/>
+				{% endfor %}
+			{% else %}
+				<p>No latest nicks available</p>
+			{% endif %}
+		</div>
+		<div class= "list-container" style="margin-left: 80px;">
+			<h3>Best nicks</h3>
+			{% if top_nicks %}
+				{% for nick in top_nicks %}
+					<a href = "{% url 'nickgenerator:nick' nick.title %}">{{nick.title}}</a>&nbsp;&nbsp;{{nick.rating}}<br/>
+				{% endfor %}
+			{% else %}
+				<p>No top nicks available</p>
+			{% endif %}
+		</div>
+		</div>
+	    </div>
+	</div>
+    </body>
+</html>

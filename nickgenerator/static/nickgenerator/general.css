@@ -1,0 +1,157 @@
+html, body {
+	background-color: #fff;
+	color: #636b6f;	
+	font-family: 'M PLUS 1p', sans-serif;
+	font-weight: 100;
+	height: 100%;
+	margin: 0;
+}
+
+.full-height {
+	height: 100%;
+}
+
+.flex-center {
+	align-items: center;
+	display: flex;
+	justify-content: center;
+}
+
+.position-ref {
+	position: relative;
+}
+
+.top-right {
+	position: absolute;
+	right: 10px;
+	top: 18px;
+}
+
+.content {
+	text-align: center;
+}
+
+.title {
+	font-size: 30px;
+}
+
+.links > a, .controls > a{
+	color: #636b6f;
+	padding: 0 25px;
+	font-size: 12px;
+	font-weight: 600;
+	letter-spacing: .1rem;
+	text-decoration: none;
+	text-transform: uppercase;
+}
+
+.controls {
+	margin-top: 30px;
+}
+
+.up-text {
+	margin-top: 10px;
+}
+
+.art-item-container {
+	float: left;
+	margin-left: 20px;
+	font-weight: 600;
+	font-size: 10px;
+}
+
+.thin-container {
+	width: 200px;
+}
+
+.thick-container {
+	width: 300px;
+}
+
+.poster {
+	background-color: #fff;
+	background-size: cover;
+	background-position: center;
+}
+
+.rectangled-poster {
+	width: 200px;
+	height: 350px;	
+}
+
+.squared-poster {
+	width:300px;
+	height:300px;
+}
+
+.thin-text {
+	font-size: 16px;
+	margin-top: 30px;
+	margin-bottom: 30px;	
+}
+
+.thin-text > a {
+	color: #939b9f;
+	text-decoration: none;
+	font-weight: 600;
+}
+
+.rating {
+	width: 100px;
+	height: 100px;
+	background-size: cover;
+}
+
+.normal-rating {
+	margin-left: 50px;
+}
+
+.double-margin-rating {
+	margin-left: 100px;
+}
+
+/**
+ */
+
+.list-container{
+	font-family: 'M PLUS 1p', sans-serif;
+	/*font-family: 'Raleway','sans-serif';*/
+	font-size: 15px;
+	/*float: left;*/
+	margin: 40px;
+	font-weight: 600;
+	display: inline-block;
+	text-align: left;
+}
+
+.list-container > a{
+	text-decoration: none;
+	color: #0074D9;
+}
+
+.new-nick{
+	font-size: 150px;
+	color: #FF4136;
+       	font-family: 'Ailerons', 'sans-serif';	
+}
+
+.checking-result{
+	font-size: 30px;
+	/*float:left;*/
+	display: inline-block;
+	margin-top: 20px;
+}
+
+.checking-result > a{
+	text-decoration: none;
+	color: inherit;
+}
+
+.result-free{
+	color: #2ECC40;
+}
+
+.result-busy{
+	color: #FF4136;
+}
+

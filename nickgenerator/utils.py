@@ -1,4 +1,4 @@
-from .models import Like
+from .models import Nick, Like
 
 def get_client_ip(request):
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
@@ -15,3 +15,10 @@ def is_liked(request, nick_title):
         return False
     else: 
         return True 
+
+def try_find_nick(nick_title):
+    try:
+        return Nick.objects.get(title = nick_title)
+    except Nick.DoesNotExist:
+        raise Http404('Nick does not exist')
+

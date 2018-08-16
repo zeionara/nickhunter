@@ -1,0 +1,46 @@
+<!doctype html>
+
+{% load static %}
+
+<html lang="en">
+    <head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>Nickhunter</title>
+
+	<!-- Fonts -->
+	<link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
+	<link href="https://fonts.googleapis.com/css?family=M+PLUS+1p:300" rel="stylesheet">
+
+
+	<!-- Styles -->
+	<link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'nickgenerator/general.css' %}">
+
+    </head>
+    <body>
+	<div class="full-height">
+	    <div class="content">
+		{% if header %}
+		<div class="title up-text">
+			{{header}}
+		</div>
+		{% endif %}
+		<div class="controls">
+			<a href="{% url 'nickgenerator:index' %}">&lt;back&gt;</a>
+		</div>
+		<div class = "list-container">
+			{% if nicks %}
+				{% for nick in nicks %}
+				<a href = "{% url 'nickgenerator:nick' nick.title %}">{{nick.title}}</a>&nbsp;&nbsp;{{nick.date}}&nbsp;&nbsp;{{nick.rating}}<br/>
+				{% endfor %}
+			{% else %}
+				<p>No nicks available</p>
+			{% endif %}
+		</div>
+	    </div>
+	</div>
+    </body>
+</html>

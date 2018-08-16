@@ -155,3 +155,7 @@ html, body {
 	color: #FF4136;
 }
 
+.list-container > h3 > a{
+	text-decoration: none;
+	color: inherit;
+}

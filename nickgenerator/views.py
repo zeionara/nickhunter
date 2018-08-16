@@ -12,55 +12,13 @@ from django.template import loader
 
 from django.http import Http404
 
-from .models import Nick
+# local
 
-EVEN = ['b','c','d','f','g','h','j','k','l','m','n','p','r','s','t','v','x','z','q','ch','sh']
-EVEN_LENGTH = len(EVEN)
-ODD = ['a','e','i','o','u','w','y','ua','io','ia','oa']
-ODD_LENGTH = len(ODD)
-MIN_LENGTH = 3
-MAX_LENGTH = 6
-
-def is_404(url, sign):
-    try:
-        response = urlopen(url)
-    except HTTPError:
-        return True
-
-    data = response.read()
-    return sign in data.decode('utf-8')
-
-def is_vk_free(nick):
-    return is_404('http://vk.com/%s' % nick, 'error404')
-
-def is_github_free(nick):
-    return is_404('http://github.com/%s' % nick, '404')
-
-def get_time_ago(date):
-    seconds = int((timezone.now() - date).total_seconds())
-    if seconds < 60:
-        return '%i seconds ago' % int(seconds)
-    elif seconds < 3600:
-        return '%i minutes ago' % int(seconds / 60)
-    elif seconds < 86400:
-        return '%i hours ago' % int(seconds / 3600)
-    else:
-        return '%i days ago' % int(seconds / 86400)
-
-def date_to_string(date):
-    return date.strftime("%d %B %Y %H:%m:%S")
-
-def get_new_nick():
-    next_odd = random.random() > 0.5;
-    nick_length = random.randint(MIN_LENGTH, MAX_LENGTH)
-    nick = ''
-    for i in range(nick_length):
-        if next_odd:
-            nick = nick + ODD[random.randint(0, ODD_LENGTH - 1)]
-        else:
-            nick = nick + EVEN[random.randint(0, EVEN_LENGTH - 1)]
-        next_odd = not next_odd
-    return nick
+from .models import Nick, Like
+from .converters import get_time_ago, date_to_string
+from .generators import get_new_nick
+from .adapters import is_vk_free, is_github_free
+from .utils import is_liked, get_client_ip
 
 def index(request):
     latest_nicks = Nick.objects.order_by('-date')[:5]
@@ -74,7 +32,8 @@ def index(request):
             'top_nicks': best_nicks, 
             'generated_nick': new_nick,
             'vk_free': is_vk_free(new_nick),
-            'github_free': is_github_free(new_nick)
+            'github_free': is_github_free(new_nick),
+            'is_liked': is_liked(request, new_nick)
     }
     
     new_nick_object = Nick(title = new_nick, date = timezone.now())
@@ -95,6 +54,7 @@ def details(request, nick_title):
         raise Http404('Nick does not exist')
         #return no_such_page(request)
     
+
     
     latest_nicks = Nick.objects.order_by('-date')[:5]
     best_nicks = Nick.objects.order_by('-rating')[:5]
@@ -108,7 +68,8 @@ def details(request, nick_title):
             'vk_free': is_vk_free(required_nick.title),
             'github_free': is_github_free(required_nick.title),
             'date': required_nick.date,
-            'rating': required_nick.rating
+            'rating': required_nick.rating, 
+            'is_liked': is_liked(request, nick_title)
     }
 
     #return HttpResponse(template.render(context, request))
@@ -125,11 +86,37 @@ def like(request, nick_title):
         required_nick = Nick.objects.get(title = nick_title)
     except Nick.DoesNotExist:
         raise Http404('Nick does not exist')
+    
+    appendix = 1
 
-    required_nick.rating = required_nick.rating + 1;
+    try:
+        required_like = Like.objects.get(nick_title = nick_title, ip_address = get_client_ip(request))
+    except Like.DoesNotExist:
+        like = Like(nick_title = nick_title, ip_address = get_client_ip(request))
+        like.save()
+    else:
+        required_like.delete() 
+        appendix = -1
+
+    required_nick.rating = required_nick.rating + appendix;
     required_nick.save()
 
     return redirect('nickgenerator:nick', nick_title = nick_title)
+
+def latest(request):
+    nicks = Nick.objects.order_by('-date')
+    for nick in nicks:
+        nick.date = date_to_string(nick.date)
+    context = {'nicks': nicks, 'header': 'Latest nicks'}
+    return render(request, 'nickgenerator/all.html', context)
+
+def best(request):
+    nicks = Nick.objects.order_by('-rating')
+    for nick in nicks:
+        nick.date = date_to_string(nick.date)
+    context = {'nicks': nicks, 'header':'Best nicks'}
+    return render(request, 'nickgenerator/all.html', context)
+
 
 def no_such_page(request):
     return HttpResponse("404 - there is no such page on this site")

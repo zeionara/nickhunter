@@ -29,7 +29,7 @@
 		</div>
 		{% endif %}
 		<div class="controls">
-			<a href="{% url 'nickgenerator:like' generated_nick %}">&lt;like&gt;</a>
+			<a href="{% url 'nickgenerator:like' generated_nick %}">&lt;{% if is_liked %}dislike{% else %}like{% endif %}&gt;</a>
 			&nbsp;&nbsp;
 			<a href="{% url 'nickgenerator:index' %}">&lt;new&gt;</a>
 		</div>
@@ -48,7 +48,7 @@
 		</div>
 		<div class='list-containers'>
 		<div class = "list-container">
-			<h3>Latest nicks</h3>
+			<h3><a href="{% url 'nickgenerator:latest' %}">Latest nicks</a></h3>
 			{% if latest_nicks %}
 				{% for nick in latest_nicks %}
 					<a href = "{% url 'nickgenerator:nick' nick.title %}">{{nick.title}}</a>&nbsp;&nbsp;{{nick.date}}<br/>
@@ -58,7 +58,7 @@
 			{% endif %}
 		</div>
 		<div class= "list-container" style="margin-left: 80px;">
-			<h3>Best nicks</h3>
+			<h3><a href="{% url 'nickgenerator:best' %}">Best nicks</a></h3>
 			{% if top_nicks %}
 				{% for nick in top_nicks %}
 					<a href = "{% url 'nickgenerator:nick' nick.title %}">{{nick.title}}</a>&nbsp;&nbsp;{{nick.rating}}<br/>
